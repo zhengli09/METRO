@@ -1,0 +1,4 @@
+useDynLib(METRO, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+export(METROIndStat)
+export(METROSumStat)
