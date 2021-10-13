@@ -135,8 +135,9 @@ Rcpp::List METROSummaryStats(
   {
     cout << "WARNING: heritabilities from all genetic ancestries ";
     cout << "are below the threshold " << hthre << endl;
+    // produce a conservative p-value
     pvalueLRT = Rcpp::as<double>(
-    pchisq(_["q"] = LRTStat, _["df"] = M, _["lower.tail"] = false)
+      pchisq(_["q"] = LRTStat, _["df"] = M, _["lower.tail"] = false)
     );
   }
 

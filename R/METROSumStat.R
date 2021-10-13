@@ -1,6 +1,6 @@
 # Author: Zheng Li
 # Date: 2021-06-22
-# METRO with summary statistics
+# METRO with GWAS summary statistics
 
 #' METRO with individual level expression data and summary level GWAS data
 #'
@@ -78,7 +78,7 @@ METROSumStat <- function(
   }
 
   # preprocessing:
-  # 1.center and standardize each SNPs
+  # 1.center and standardize each SNP
   # 2.quantile normalize expression data
   # 3.transform GWAS summary statistics as if the data are centered
   #   and standardized
@@ -96,6 +96,7 @@ METROSumStat <- function(
       summary(lm(X ~ snpj))$coefficients["snpj", "Estimate"]
       })
     })
+  if(p == 1) eQTLEst <- t(eQTLEst)
   eQTLLD <- lapply(eQTLGeno, cor)
 
   # run METRO
