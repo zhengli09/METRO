@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // METROSummaryStats
 Rcpp::List METROSummaryStats(const Rcpp::NumericMatrix betaeQTLin, const Rcpp::NumericVector betaGWASin, const Rcpp::List Dzin, const Rcpp::NumericMatrix Din, const Rcpp::NumericVector nzin, const double n, const double nu, const double hthre, const int maxIter, const double tol, const bool verbose);
 RcppExport SEXP _METRO_METROSummaryStats(SEXP betaeQTLinSEXP, SEXP betaGWASinSEXP, SEXP DzinSEXP, SEXP DinSEXP, SEXP nzinSEXP, SEXP nSEXP, SEXP nuSEXP, SEXP hthreSEXP, SEXP maxIterSEXP, SEXP tolSEXP, SEXP verboseSEXP) {

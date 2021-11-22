@@ -24,7 +24,6 @@
 #' \item{weights}{A numeric vector of weights from multiple genetic ancestries.}
 #' \item{beta}{A numeric vector of genetic effects on gene expression among GWAS
 #'    individuals.}
-#' \item{zscore}{TWAS(FUSION) zscore statistic from a two stage model.}
 #' \item{LRTStat}{Likelihood ratio test statistic.}
 #' \item{df}{Degree of freedoms of the reference chi2 distribution for LRTStat.}
 #' \item{pvalueLRT}{P-value of the likelihood ratio test.}
@@ -53,7 +52,7 @@ METROIndStat <- function(
   GWASPheno,
   hthre = 1e-3,
   maxIter = 1000,
-  tol = 1e-3,
+  tol = 2e-3,
   verbose = FALSE
   )
 {

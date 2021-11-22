@@ -74,7 +74,6 @@ Rcpp::List METROSummaryStats(
   double alpha; // gene effect on GWAS outcome
   arma::vec w(M); // population weights
   arma::vec beta(p, fill::zeros); // SNP effects on gene expression in GWAS
-  double zscore; // TWAS zscore from two stage model
 
   // METRO algorithm
   // 1. Estimation under the null
@@ -155,16 +154,11 @@ Rcpp::List METROSummaryStats(
     beta += w(m) * mubeta.subvec(m * p, (m + 1) * p - 1);
   }
 
-  // 7.TWAS zscores
-  zscore = arma::as_scalar(beta.t() * betaGWAS * std::sqrt(n - 1)) / 
-    arma::as_scalar(arma::sqrt(beta.t() * D * beta));
-
   auto end = chrono::steady_clock::now();
   output = Rcpp::List::create(
     _["alpha"] = alpha,
     _["weights"] = w,
     _["beta"] = beta,
-    _["zscore"] = zscore,
     _["LRTStat"] = LRTStat,
     _["df"] = df,
     _["pvalueLRT"] = pvalueLRT,

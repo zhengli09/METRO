@@ -3,32 +3,41 @@
 \alias{METRO}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  METRO:Multi-ancEstry TRanscriptOme-wide analysis
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  METRO is a new computational method that leverages expression data collected 
+  from multiple genetic ancestries to enhance Transcriptome-wide association 
+  studies (TWAS). METRO incorporates expression prediction models constructed 
+  in multiple genetic ancestries through a likelihood-based inference framework, 
+  producing calibrated test statistics with substantially improved TWAS power.
 }
 \details{
-  This section should provide a more detailed overview of how to use the
-  package, including the most important functions.
+  Refer to:\cr
+  (1) "METROIndStat" to perform multi-ancestry TWAS analysis with individual level 
+      gene expression data and individual level GWAS data.\cr
+  (2) METROSumStat that performs multi-ancestry TWAS analysis with individual level 
+      gene expression data and GWAS summary statistics.\cr
+  (3) METRO2SumStat that performs multi-ancestry TWAS analysis with summary level 
+      gene expression data and GWAS summary statistics.
 }
 \author{
-Your Name, email optional.
+Zheng Li, Xiang Zhou.
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Zheng Li <zlisph@umich.edu>
 }
 \references{
-  This optional section can contain literature or other references for
-  background information.
+  METRO: Multi-ancestry transcriptome-wide association studies for
+  powerful gene-trait association detection
 }
 \keyword{ package }
-\seealso{
-  Optional links to other man pages
-}
 \examples{
   \dontrun{
-     ## Optional simple examples of the most important functions
-     ## These can be in \dontrun{} and \donttest{} blocks.   
+    data(example)
+    METRORes <- METROSumStat(eQTLGeno, eQTLExpression, GWASzscores, 
+      LDMatrix, n, verbose = T)
+    METRORes$alpha
+    METRORes$weights
+    METRORes$pvalueLRT
   }
 }
