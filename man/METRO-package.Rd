@@ -14,12 +14,21 @@
 }
 \details{
   Refer to:\cr
-  (1) "METROIndStat" to perform multi-ancestry TWAS analysis with individual level 
+  (1) "METROIndStat" that performs multi-ancestry TWAS analysis with individual level 
       gene expression data and individual level GWAS data.\cr
-  (2) METROSumStat that performs multi-ancestry TWAS analysis with individual level 
+  (2) "METROSumStat" that performs multi-ancestry TWAS analysis with individual level 
       gene expression data and GWAS summary statistics.\cr
-  (3) METRO2SumStat that performs multi-ancestry TWAS analysis with summary level 
-      gene expression data and GWAS summary statistics.
+  (3) "METRO2SumStat" that performs multi-ancestry TWAS analysis with summary level 
+      gene expression data and GWAS summary statistics.\cr
+  (4) "METROIndStatPleio" that performs multi-ancestry TWAS analysis with individual 
+      level gene expression data and individual level GWAS data and controls for
+      horizontal pleiotropic effects.\cr
+  (5) "METROSumStatPleio" that performs multi-ancestry TWAS analysis with individual 
+      level gene expression data and GWAS summary statistics and controls for
+      horizontal pleiotropic effects.\cr
+  (6) "METRO2SumStatPleio" that performs multi-ancestry TWAS analysis with summary 
+      level gene expression data and GWAS summary statistics and controls for
+      horizontal pleiotropic effects.
 }
 \author{
 Zheng Li, Xiang Zhou.

@@ -32,9 +32,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// METROSummaryStatsPleio
+Rcpp::List METROSummaryStatsPleio(const Rcpp::NumericMatrix betaeQTLin, const Rcpp::NumericVector betaGWASin, const Rcpp::List Dzin, const Rcpp::NumericMatrix Din, const Rcpp::NumericVector nzin, const double n, const double nu, const double hthre, const int maxIter, const double tol, const bool verbose);
+RcppExport SEXP _METRO_METROSummaryStatsPleio(SEXP betaeQTLinSEXP, SEXP betaGWASinSEXP, SEXP DzinSEXP, SEXP DinSEXP, SEXP nzinSEXP, SEXP nSEXP, SEXP nuSEXP, SEXP hthreSEXP, SEXP maxIterSEXP, SEXP tolSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type betaeQTLin(betaeQTLinSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type betaGWASin(betaGWASinSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type Dzin(DzinSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix >::type Din(DinSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector >::type nzin(nzinSEXP);
+    Rcpp::traits::input_parameter< const double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< const double >::type nu(nuSEXP);
+    Rcpp::traits::input_parameter< const double >::type hthre(hthreSEXP);
+    Rcpp::traits::input_parameter< const int >::type maxIter(maxIterSEXP);
+    Rcpp::traits::input_parameter< const double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< const bool >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(METROSummaryStatsPleio(betaeQTLin, betaGWASin, Dzin, Din, nzin, n, nu, hthre, maxIter, tol, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_METRO_METROSummaryStats", (DL_FUNC) &_METRO_METROSummaryStats, 11},
+    {"_METRO_METROSummaryStatsPleio", (DL_FUNC) &_METRO_METROSummaryStatsPleio, 11},
     {NULL, NULL, 0}
 };
 

@@ -5,3 +5,7 @@ METROSummaryStats <- function(betaeQTLin, betaGWASin, Dzin, Din, nzin, n, nu, ht
     .Call(`_METRO_METROSummaryStats`, betaeQTLin, betaGWASin, Dzin, Din, nzin, n, nu, hthre, maxIter, tol, verbose)
 }
 
+METROSummaryStatsPleio <- function(betaeQTLin, betaGWASin, Dzin, Din, nzin, n, nu, hthre, maxIter, tol, verbose) {
+    .Call(`_METRO_METROSummaryStatsPleio`, betaeQTLin, betaGWASin, Dzin, Din, nzin, n, nu, hthre, maxIter, tol, verbose)
+}
+
