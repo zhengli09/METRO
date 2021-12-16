@@ -53,9 +53,9 @@ METROIndStatPleio <- function(
   eQTLExpression,
   GWASGeno,
   GWASPheno,
-  hthre = 1e-3,
+  hthre = 2e-3,
   maxIter = 1000,
-  tol = 2e-3,
+  tol = 1e-3,
   verbose = FALSE
   )
 {
@@ -65,11 +65,14 @@ METROIndStatPleio <- function(
   p <- ncol(GWASGeno)
 
   # error checking
+  if(p == 0){
+    stop("Number of SNPs is zero")
+  }
   if(length(eQTLExpression) != M){
     stop("Number of datasets does not match in expression studies")
   }
   if(any(sapply(eQTLExpression, length) != nz)){
-    stop("Number of individuals does not match in expression studies!")
+    stop("Number of individuals does not match in expression studies")
   }
   if(length(GWASPheno) != n){
     stop("Number of individuals does not match in GWAS data")
@@ -103,6 +106,7 @@ METROIndStatPleio <- function(
     snpj <- GWASGeno[, j]
     summary(lm(GWASPheno ~ snpj))$coefficients["snpj", "Estimate"]
     })
+  if(p == 1) eQTLEst <- t(eQTLEst)
   # 3.LD matrices
   eQTLLD <- lapply(eQTLGeno, cor)
   GWASLD <- cor(GWASGeno)

@@ -12,7 +12,7 @@ METRO2SumStatPleio(
   GWASLD,
   ns,
   n,
-  nu = 0.8,
+  nu = 0.9,
   hthre = 0.002,
   maxIter = 1000,
   tol = 0.001,

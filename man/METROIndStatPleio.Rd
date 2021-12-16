@@ -10,9 +10,9 @@ METROIndStatPleio(
   eQTLExpression,
   GWASGeno,
   GWASPheno,
-  hthre = 0.001,
+  hthre = 0.002,
   maxIter = 1000,
-  tol = 0.002,
+  tol = 0.001,
   verbose = FALSE
 )
 }

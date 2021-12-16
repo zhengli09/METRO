@@ -9,9 +9,10 @@ METROIndStat(
   eQTLExpression,
   GWASGeno,
   GWASPheno,
-  hthre = 0.001,
+  covars = NULL,
+  hthre = 0.002,
   maxIter = 1000,
-  tol = 0.002,
+  tol = 0.001,
   verbose = FALSE
 )
 }
@@ -28,6 +29,9 @@ and columns are the same set of cis-SNPs as in the expression studies.}
 
 \item{GWASPheno}{A numeric vector of GWAS outcome variable.}
 
+\item{covars}{A numeric matrix of covariates in the GWAS data. 
+Rows are samples and columns are different covariates.}
+
 \item{hthre}{A numeric scalar. Heritability threshold to determine whether
 cis-SNPs are predictive of gene expression.}
 
@@ -41,6 +45,8 @@ cis-SNPs are predictive of gene expression.}
 \code{METROIndStat} returns a list of estimated parameters and 
    statistics from METRO:
 \item{alpha}{A numeric scalar of expression-on-outcome effect.}
+\item{delta}{A numeric vector of effect size estimates for covariates if 
+   covars are provided.}
 \item{weights}{A numeric vector of weights from multiple genetic ancestries.}
 \item{beta}{A numeric vector of genetic effects on gene expression among GWAS
    individuals.}

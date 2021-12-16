@@ -60,7 +60,7 @@ METRO2SumStat <- function(
   GWASLD,
   ns,
   n,
-  nu = 0.8,
+  nu = 0.9,
   hthre = 2e-3,
   maxIter = 1000,
   tol = 1e-3,

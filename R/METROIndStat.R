@@ -12,6 +12,8 @@
 #' @param GWASGeno A numeric matrix of genotype data in GWAS. Rows are samples
 #'    and columns are the same set of cis-SNPs as in the expression studies.
 #' @param GWASPheno A numeric vector of GWAS outcome variable.
+#' @param covars A numeric matrix of covariates in the GWAS data. 
+#'    Rows are samples and columns are different covariates. 
 #' @param hthre A numeric scalar. Heritability threshold to determine whether
 #'    cis-SNPs are predictive of gene expression.
 #' @param maxIter An integer. Maximum number of iterations for PX-EM algorithm.
@@ -21,6 +23,8 @@
 #' @return \code{METROIndStat} returns a list of estimated parameters and 
 #'    statistics from METRO:
 #' \item{alpha}{A numeric scalar of expression-on-outcome effect.}
+#' \item{delta}{A numeric vector of effect size estimates for covariates if 
+#'    covars are provided.}
 #' \item{weights}{A numeric vector of weights from multiple genetic ancestries.}
 #' \item{beta}{A numeric vector of genetic effects on gene expression among GWAS
 #'    individuals.}
@@ -50,9 +54,10 @@ METROIndStat <- function(
   eQTLExpression,
   GWASGeno,
   GWASPheno,
-  hthre = 1e-3,
+  covars = NULL,
+  hthre = 2e-3,
   maxIter = 1000,
-  tol = 2e-3,
+  tol = 1e-3,
   verbose = FALSE
   )
 {
@@ -62,11 +67,14 @@ METROIndStat <- function(
   p <- ncol(GWASGeno)
 
   # error checking
+  if(p == 0){
+    stop("Number of SNPs is zero")
+  }
   if(length(eQTLExpression) != M){
     stop("Number of datasets does not match in expression studies")
   }
   if(any(sapply(eQTLExpression, length) != nz)){
-    stop("Number of individuals does not match in expression studies!")
+    stop("Number of individuals does not match in expression studies")
   }
   if(length(GWASPheno) != n){
     stop("Number of individuals does not match in GWAS data")
@@ -100,12 +108,30 @@ METROIndStat <- function(
     snpj <- GWASGeno[, j]
     summary(lm(GWASPheno ~ snpj))$coefficients["snpj", "Estimate"]
     })
+  if(p == 1) eQTLEst <- t(eQTLEst)
   # 3.LD matrices
   eQTLLD <- lapply(eQTLGeno, cor)
   GWASLD <- cor(GWASGeno)
 
-  # run METRO
-  METRORes <- METROSummaryStats(eQTLEst, GWASEst, eQTLLD, GWASLD, nz, n,
-    nu = 1, hthre = hthre, maxIter = maxIter, tol = tol, verbose = verbose)
+  # Handle covariates data
+  if(!is.null(covars)){
+    if(!is.matrix(covars)){
+      covars <- as.matrix(covars)
+    }
+    if(nrow(covars) != n){
+      stop("Number of individuals does not match in covariates data")
+    }
+    covars <- scale(covars, center = T, scale = F)
+    covGCovars <- cov(GWASGeno, covars)
+    covYCovars <- cov(covars, GWASPheno)
+    covCovars <- cov(covars)
+    METRORes <- METROCovars(eQTLEst, GWASEst, eQTLLD, GWASLD, nz, n,
+      covGCovars, covYCovars, covCovars, nu = 1, hthre = hthre,
+      maxIter = maxIter, tol = tol, verbose = verbose)
+  } else{
+    # run METRO
+    METRORes <- METROSummaryStats(eQTLEst, GWASEst, eQTLLD, GWASLD, nz, n,
+      nu = 1, hthre = hthre, maxIter = maxIter, tol = tol, verbose = verbose)
+  }
+  METRORes
 }
-
