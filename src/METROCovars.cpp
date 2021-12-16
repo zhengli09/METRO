@@ -283,7 +283,9 @@ Rcpp::List METRO_Covars_EM_Algorithm(
       0.5 * p * arma::sum(arma::log(sigma2beta)) -
       0.5 * logdet - 
       0.5 * arma::sum((nz - 1.0) / sigma2m) -
-      0.5 * (n - 1) / sigma2 +
+      arma::as_scalar(
+        0.5 * (n - 1.0) * (1.0 + delta.t() * covCovars * delta - 
+        2.0 * delta.t() * covYCovars)) +
       0.5 * arma::as_scalar(mubeta.t() * Sigmabetainv * mubeta)
       );
 
