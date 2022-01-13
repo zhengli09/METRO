@@ -8,47 +8,52 @@ if(!require(devtools))
   install.packages(devtools)
 devtools::install_github("zhengli09/METRO")
 library(METRO)
+?METRO
 ```
 
 ## Usage
-There are two main functions in METRO package. One is **METROIndStat** that performs multi-ancestry TWAS analysis with individual level gene expression data and individual level GWAS data. The other one is **METROSumStat** that performs multi-ancestry TWAS analysis with individual level gene expression data and GWAS summary statistics in the form of marginal z-scores. Please refer to the paper and documentations for the detailed instructions.
-```r
-library(METRO)
-?METROIndStat
-?METROSumStat
-```
+There are three main functions in METRO package:
+1. **METROIndStat**: multi-ancestry TWAS analysis with individual level gene expression data and individual level GWAS data.
+2. **METROSumStat**: multi-ancestry TWAS analysis with individual level gene expression data and GWAS summary statistics.
+3. **METRO2SumStat**: multi-ancestry TWAS analysis with summary level gene expression data and GWAS summary statistics.
+
+We have also extended METRO to adjust for SNP horizontal pleiotropy with the Egger assumption. The relevant functions are
+**METROEggerIndStat**, **METROEggerSumStat**, and **METROEgger2SumStat**.
+
+[Please refer to the paper and documentations for the detailed instructions]
+
 
 ## Example
-We exemplify the usage of METRO by analyzing the gene *ABCA1* with GEUVADIS expression data and GLGC HDL GWAS summary statistics. The two datasets are publically available. Please refer to the paper for the detailed processing of the two datasets.
+We exemplify the usage of METRO by analyzing the gene *PLTP* with GEUVADIS expression data and GLGC HDL GWAS summary statistics. The two datasets are publically available. Please refer to the paper for the detailed processing of the two datasets.
 ```r
-data(example)
-METRORes <- METROSumStat(eQTLGeno, eQTLExpression, GWASzscores, LDMatrix, n,
-  nu = 0.8, verbose = T)
+data(PLTP_GEUVADIS)
+METRORes <- METROSumStat(eQTLGeno, eQTLExpression, GWASzscores, 
+  LDMatrix, n, verbose = T)
 Starting METRO...
 ***** info *****
-  - Handling data with 315 SNPs
+  - Handling data with 124 SNPs
   - Handling data with 2 expression studies 
 ***** Starting EM algorithm unter the null (no effects) *****
-    log-likelihood: -47373.7
+    log-likelihood: -47352
     sigma2: 1
-    sigma2beta: 0.00105908 1.07259e-05
-    sigma2m: 0.698478 0.996663
+    sigma2beta: 0.000788926 0.0015376
+    sigma2m: 0.883093 0.836214
     alpha: 0 0
 ***** Starting EM algorithm unter the alternative (positive effects) *****
-    log-likelihood: -46824.8
-    sigma2: 0.982954
-    sigma2beta: 0.00105659 7.28043e-06
-    sigma2m: 0.69898 0.999371
-    alpha: 4.62758e-05 4.20893
+    log-likelihood: -47287.6
+    sigma2: 0.999843
+    sigma2beta: 0.000782837 0.00157566
+    sigma2m: 0.88352 0.835781
+    alpha: 0 0
 ***** Starting EM algorithm unter the alternative (negative effects) *****
-    log-likelihood: -46827.6
-    sigma2: 0.982952
-    sigma2beta: 9.90301e-06 2.73241e-06
-    sigma2m: 0.998661 0.999145
-    alpha: -3.60259 -0.441739
+    log-likelihood: -47118.6
+    sigma2: 0.992376
+    sigma2beta: 0.000132166 0.00161972
+    sigma2m: 0.993455 0.835366
+    alpha: -1.67004 -0.0288259
 ***** done *****
 # Key parameter estiamtes and statistics:
-METRORes$alpha # 4.2
-METRORes$weights # c(0, 1)
-METRORes$pvalueLRT # 9.6e-241
+METRORes$alpha # -1.70
+METRORes$weights # c(0.98, 0.02)
+METRORes$pvalueLRT # 4.2e-102
 ```

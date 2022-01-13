@@ -20,7 +20,7 @@
 #' @param tol A numeric scalar. Convergence tolerance for PX-EM algorithm.
 #' @param verbose A logical scalar. Whether to show verbose information.
 #'
-#' @return \code{METROIndStatPleio} returns a list of estimated parameters and 
+#' @return \code{METROEggerIndStat} returns a list of estimated parameters and 
 #'    statistics from METRO:
 #' \item{alpha}{A numeric scalar of expression-on-outcome effect.}
 #' \item{gamma}{A numeric scalar of horizontal pleiotropic effect.}
@@ -48,7 +48,7 @@
 #'
 #' @export
 #'
-METROIndStatPleio <- function(
+METROEggerIndStat <- function(
   eQTLGeno,
   eQTLExpression,
   GWASGeno,

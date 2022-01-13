@@ -1,23 +1,19 @@
 # Author: Zheng Li
-# Date: 2021-11-21
-# METRO with GWAS summary statistics and eQTL summary statistics
-# and is extended to adjust for horizontal pleiotropic effects
+# Date: 2021-11-30
+# METRO with GWAS summary statistics and is extended
+# to adjust for horizontal pleiotropic effects
 
-#' METRO with summary level expression data and summary level GWAS data
+#' METRO with individual level expression data and summary level GWAS data
 #' and is extended to adjust for horizontal pleiotropic effects
 #'
-#' @param eQTLzscores A pxM numeric matrix of marginal zscores for p SNPs
-#'    from M eQTL studies conducted in different ancestries.
-#' @param eQTLLDs M-list of SNP-SNP correlation (LD) matrices estimated from
-#'    reference panels with individuals in the same ancestries as expression
-#'    studies. The order has to match across eQTL zscores, eQTL LD matrices, 
-#'    and the number of individuals.
-#' @param GWASzscores A numeric vector of marginal zscores for p SNPs from GWAS.
-#' @param GWASLD A SNP-SNP correlation (LD) matrix estimated from a reference
+#' @param eQTLGeno A list of Genotype matrices from multiple genetic ancestries.
+#'    Rows are samples and columns are cis-SNPs shared across all genotype
+#'    matrices in expression studies and GWAS. 
+#' @param eQTLExpression A list of numeric vectors. Gene expression values from
+#'    multiple genetic ancestries.
+#' @param GWASzscores A numeric vector of marginal zscores from GWAS.
+#' @param LDMatrix A SNP-SNP correlation (LD) matrix estimated from a reference
 #'    panel with individuals in the same ancestry as GWAS data.
-#' @param ns A numeric vector. The number of individuals in each expression study.
-#'    The order has to match across eQTL zscores, eQTL LD matrices, and the
-#'    number of individuals.
 #' @param n The number of individuals in GWAS data.
 #' @param nu The shrinkage intensity parameter ranging from 0 to 1 for the LD
 #'    matrix. A smaller value indicates higher intensity.
@@ -27,7 +23,7 @@
 #' @param tol A numeric scalar. Convergence tolerance for PX-EM algorithm.
 #' @param verbose A logical scalar. Whether to show verbose information.
 #'
-#' @return \code{METRO2SumStatPleio} returns a list of estimated parameters and 
+#' @return \code{METROEggerSumStat} returns a list of estimated parameters and 
 #'    statistics from METRO:
 #' \item{alpha}{A numeric scalar of expression-on-outcome effect.}
 #' \item{gamma}{A numeric scalar of horizontal pleiotropic effect.}
@@ -55,12 +51,11 @@
 #'
 #' @export
 #'
-METRO2SumStatPleio <- function(
-  eQTLzscores,
-  eQTLLDs,
+METROEggerSumStat <- function(
+  eQTLGeno,
+  eQTLExpression,
   GWASzscores,
-  GWASLD,
-  ns,
+  LDMatrix,
   n,
   nu = 0.9,
   hthre = 2e-3,
@@ -69,33 +64,45 @@ METRO2SumStatPleio <- function(
   verbose = FALSE
   )
 {
-  if(!is.matrix(eQTLzscores)){
-    eQTLzscores <- as.matrix(eQTLzscores)
-  }
-  M <- ncol(eQTLzscores)
+  M <- length(eQTLGeno)
+  nz <- sapply(eQTLGeno, nrow)
   p <- length(GWASzscores)
 
   # error checking
-  if(nrow(eQTLzscores) != p){
-    stop("SNPs do not match in eQTL zscores")
+  if(length(eQTLExpression) != M){
+    stop("Number of datasets does not match in expression studies")
   }
-  if(any(sapply(eQTLLDs, nrow)!= p) | any(sapply(eQTLLDs, ncol)!= p)){
-    stop("SNPs do not match in reference LD matrices for expression data")
+  if(any(sapply(eQTLExpression, length) != nz)){
+    stop("Number of individuals does not match in expression studies!")
   }
-  if(any(dim(GWASLD) != p)){
-    stop("SNPs do not match in reference LD matrix for GWAS data")
+  if(any(sapply(eQTLGeno, ncol) != p) | any(dim(LDMatrix) != p)){
+    stop("SNPs do not match across expression studies and GWAS data")
   }
 
   # preprocessing:
-  if(M == 1){
-    eQTLData <- eQTLzscores / sqrt(ns - 1)
-  } else if(M > 1){
-    eQTLData <- eQTLzscores %*% diag(1 / sqrt(ns - 1))
-  }
+  # 1.center and standardize each SNP
+  # 2.quantile normalize expression data
+  # 3.transform GWAS summary statistics as if the data are centered
+  #   and standardized
+  eQTLGeno <- lapply(eQTLGeno, scale, center = T, scale = T)
+  eQTLExpression <- lapply(eQTLExpression, function(X){
+    qqnorm(X, plot = FALSE)$x
+    })
   GWASData <- GWASzscores / sqrt(n - 1)
 
+  # generate summary statistics for eQTL data
+  eQTLEst <- sapply(1:M, function(m){
+    X <- eQTLExpression[[m]]
+    sapply(1:p, function(j){
+      snpj <- eQTLGeno[[m]][, j]
+      summary(lm(X ~ snpj))$coefficients["snpj", "Estimate"]
+      })
+    })
+  if(p == 1) eQTLEst <- t(eQTLEst)
+  eQTLLD <- lapply(eQTLGeno, cor)
+
   # run METRO
-  METRORes <- METROSummaryStatsPleio(eQTLData, GWASData, eQTLLDs, GWASLD, ns, n,
+  METRORes <- METROSummaryStatsPleio(eQTLEst, GWASData, eQTLLD, LDMatrix, nz, n,
     nu = nu, hthre = hthre, maxIter = maxIter, tol = tol, verbose = verbose)
 }
 

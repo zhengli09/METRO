@@ -15,18 +15,19 @@
 \details{
   Refer to:\cr
   (1) "METROIndStat" that performs multi-ancestry TWAS analysis with individual level 
-      gene expression data and individual level GWAS data.\cr
+      gene expression data and individual level GWAS data. Additional covariates can
+      be included (e.g genetic PCs) for variable adjustment.\cr
   (2) "METROSumStat" that performs multi-ancestry TWAS analysis with individual level 
       gene expression data and GWAS summary statistics.\cr
   (3) "METRO2SumStat" that performs multi-ancestry TWAS analysis with summary level 
       gene expression data and GWAS summary statistics.\cr
-  (4) "METROIndStatPleio" that performs multi-ancestry TWAS analysis with individual 
+  (4) "METROEggerIndStat" that performs multi-ancestry TWAS analysis with individual 
       level gene expression data and individual level GWAS data and controls for
       horizontal pleiotropic effects.\cr
-  (5) "METROSumStatPleio" that performs multi-ancestry TWAS analysis with individual 
+  (5) "METROEggerSumStat" that performs multi-ancestry TWAS analysis with individual 
       level gene expression data and GWAS summary statistics and controls for
       horizontal pleiotropic effects.\cr
-  (6) "METRO2SumStatPleio" that performs multi-ancestry TWAS analysis with summary 
+  (6) "METROEgger2SumStat" that performs multi-ancestry TWAS analysis with summary 
       level gene expression data and GWAS summary statistics and controls for
       horizontal pleiotropic effects.
 }
@@ -42,7 +43,7 @@ Maintainer: Zheng Li <zlisph@umich.edu>
 \keyword{ package }
 \examples{
   \dontrun{
-    data(example)
+    data(PLTP_GEUVADIS.RData)
     METRORes <- METROSumStat(eQTLGeno, eQTLExpression, GWASzscores, 
       LDMatrix, n, verbose = T)
     METRORes$alpha
