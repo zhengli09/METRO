@@ -43,7 +43,7 @@ Maintainer: Zheng Li <zlisph@umich.edu>
 \keyword{ package }
 \examples{
   \dontrun{
-    data(PLTP_GEUVADIS.RData)
+    data(PLTP_GEUVADIS)
     METRORes <- METROSumStat(eQTLGeno, eQTLExpression, GWASzscores, 
       LDMatrix, n, verbose = T)
     METRORes$alpha
