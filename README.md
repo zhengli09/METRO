@@ -57,3 +57,15 @@ METRORes$alpha # -1.70
 METRORes$weights # c(0.98, 0.02)
 METRORes$pvalueLRT # 4.2e-102
 ```
+
+## Citing the work
+If you find the `METRO` package or any of the source code in this repository 
+useful for your work, please cite:
+
+> Zheng Li, Wei Zhao, Lulu Shang, Thomas H. Mosley, Sharon L.R. Kardia, 
+> Jennifer A. Smith, Xiang Zhou# (2022). METRO: Multi-ancestry transcriptome-wide 
+> association studies for powerful gene-trait association detection. American 
+> Journal of Human Genetics. https://doi.org/10.1016/j.ajhg.2022.03.003.
+
+Visit our [group website](http://www.xzlab.org) for more statistical tools on 
+analyzing genetics and genomics data.

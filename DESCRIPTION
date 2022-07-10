@@ -7,7 +7,7 @@ Author: Zheng Li
 Maintainer: Zheng Li <zlisph@umich.edu>
 Description: METRO is a computational method that leverages expression data collected
   from multiple genetic ancestries to perform transcriptome-wide association analysis
-License: GPL (>= 2)
+License: GPL (>= 3)
 Imports: Rcpp (>= 1.0.5), RcppArmadillo
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
